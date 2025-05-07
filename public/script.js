@@ -1,3 +1,10 @@
+// Update API endpoints to use absolute paths
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? '' 
+  : 'https://shaik-nihal.github.io/currency-converter';
+
+// Update fetch calls
+const response = await fetch(`${API_BASE_URL}/api/supported-currencies`);
 // Store Choices.js instances globally
 let fromChoices, toChoices;
 
