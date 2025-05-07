@@ -1,0 +1,65 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.card {
+    max-width: 500px;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-control,
+.form-select {
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.btn {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.result {
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.text-muted {
+    font-size: 14px;
+}
+
+#swapBtn {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#swapBtn:hover {
+    background-color: #5a6268;
+}
