@@ -1,0 +1,29 @@
+{
+  "name": "currency-converter",
+  "version": "1.0.0",
+  "description": "Real-time currency converter application",
+  "homepage": "https://Shaik-Nihal.github.io/currency-converter",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'No build step required'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d public"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "currency-codes": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  },
+  "keywords": [
+    "currency",
+    "converter",
+    "exchange rates"
+  ],
+  "author": "Shaik Nihal",
+  "license": "MIT"
+}
