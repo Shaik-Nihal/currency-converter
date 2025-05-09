@@ -1,8 +1,7 @@
-// Update API endpoints to use absolute paths
+// Update API endpoints to use Render backend URL
 const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? '' 
-  : 'https://shaik-nihal.github.io/currency-converter';
-
+  ? 'http://localhost:3000' // Update this port if your local backend uses a different port
+  : 'https://currency-converter-4uga.onrender.com'; // Replace with your actual Render URL
 // Store Choices.js instances globally
 let fromChoices, toChoices;
 
