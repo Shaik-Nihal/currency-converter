@@ -3,15 +3,13 @@ const API_BASE_URL = window.location.hostname === 'localhost'
   ? '' 
   : 'https://shaik-nihal.github.io/currency-converter';
 
-// Update fetch calls
-const response = await fetch(`${API_BASE_URL}/api/supported-currencies`);
 // Store Choices.js instances globally
 let fromChoices, toChoices;
 
 // Function to populate the "From" and "To" currency dropdowns
 async function populateCurrencyDropdowns() {
     try {
-        const response = await fetch('/api/supported-currencies');
+        const response = await fetch(`${API_BASE_URL}/api/supported-currencies`);
         const data = await response.json();
 
         if (data && data.supported_codes) {
@@ -41,16 +39,24 @@ async function populateCurrencyDropdowns() {
             });
         } else {
             console.error('Failed to fetch supported currencies.');
+            document.getElementById('resultText').textContent = 'Failed to load currencies.';
         }
     } catch (error) {
         console.error('Error fetching supported currencies:', error);
+        document.getElementById('resultText').textContent = 'Error loading currencies.';
     }
 }
 
 // Function to handle currency conversion
 async function convertCurrency() {
-    const from = fromChoices.getValue(true);
-    const to = toChoices.getValue(true);
+    const from = fromChoices?.getValue(true);
+    const to = toChoices?.getValue(true);
+    
+    if (!from || !to) {
+        document.getElementById('resultText').textContent = 'Please select both currencies.';
+        return;
+    }
+
     const amount = parseFloat(document.getElementById('amountInput').value);
 
     if (isNaN(amount) || amount <= 0) {
@@ -58,13 +64,19 @@ async function convertCurrency() {
         return;
     }
 
+    if (amount > 999999999) {
+        document.getElementById('resultText').textContent = 'Amount is too large. Please enter a smaller value.';
+        return;
+    }
+
     try {
-        const response = await fetch(`/api/exchange-rate?from=${from}&to=${to}`);
+        const response = await fetch(`${API_BASE_URL}/api/exchange-rate?from=${from}&to=${to}`);
         const data = await response.json();
-        const rate = data.conversion_rates[to];
+        const rate = data.conversion_rates?.[to];
 
         if (!rate) {
             document.getElementById('resultText').textContent = 'Exchange rate not available.';
+            document.getElementById('exchangeRate').value = '';
             return;
         }
 
@@ -76,6 +88,7 @@ async function convertCurrency() {
     } catch (error) {
         console.error('Error fetching exchange rate:', error);
         document.getElementById('resultText').textContent = 'Error fetching exchange rate.';
+        document.getElementById('exchangeRate').value = '';
     }
 }
 
@@ -99,18 +112,45 @@ function swapCurrencies() {
     }
 }
 
+// Function to reset the form
+function resetForm() {
+    if (fromChoices && toChoices) {
+        fromChoices.removeActiveItems();
+        toChoices.removeActiveItems();
+    }
+    document.getElementById('amountInput').value = '';
+    document.getElementById('exchangeRate').value = '';
+    document.getElementById('resultText').textContent = '';
+    document.getElementById('fromCode').textContent = '';
+    document.getElementById('toCode').textContent = '';
+}
+
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     populateCurrencyDropdowns();
     
     document.getElementById('convertBtn').addEventListener('click', convertCurrency);
     document.getElementById('swapBtn').addEventListener('click', swapCurrencies);
+    document.getElementById('resetBtn')?.addEventListener('click', resetForm);
     
-    // Optional: Add input event listener for automatic conversion
-    document.getElementById('amountInput').addEventListener('input', () => {
+    // Add input event listener for automatic conversion
+    document.getElementById('amountInput').addEventListener('input', debounce(() => {
         const amount = document.getElementById('amountInput').value;
         if (amount) {
             convertCurrency();
         }
-    });
+    }, 500));
 });
+
+// Utility function to debounce input events
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
